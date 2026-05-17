@@ -8,6 +8,9 @@ import bg.tu_varna.sit.f24621688.session.AppSession;       // Преименув
 
 import java.util.Scanner;
 
+/**
+ * Engine клас на програмата
+ */
 public class Application {
     public static void main(String[] args) {
         DataRepository repository = new AcademicRegistry();
