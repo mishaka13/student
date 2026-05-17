@@ -1,180 +1,214 @@
 package bg.tu_varna.sit.f24621688.models;
 
+import bg.tu_varna.sit.f24621688.enums.CourseType;
 import bg.tu_varna.sit.f24621688.enums.StudentStatus;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-/**
- * Represents a student in the information system.
- * <p>
- * Each student stores: name, faculty number (fn), program, group, year, status,
- * enrolled disciplines (with optional grades), and average GPA.
- */
-public class Student implements Serializable {
-    /** Full name of the student. */
-    private String name;
-    /** Unique faculty number. */
-    private String fn;
-    /** The academic program (specialty) the student is enrolled in. */
-    private String program;
-    /** Student's group number. */
-    private String group;
-    /** Current year of study. */
-    private int year;
-    /** Current enrollment status. */
+public class Student {
+    private final String fullName;
+    private final String facultyNumber;
+    private int currentYear;
+    private Program program;
+    private int groupNumber;
     private StudentStatus status;
+    private final List<ExamRecord> examRecords;
+    private final List<Discipline> registeredCourses;
+    private double gpa;
 
-    /**
-     * Disciplines the student has enrolled in, mapped to their grade.
-     * A {@code null} grade means the student has enrolled but not yet sat the exam.
-     */
-    private Map<Discipline, Double> grades;
-
-    /**
-     * Constructs a new Student enrolling in year 1.
-     * @param fn      faculty number.
-     * @param program academic program.
-     * @param group   student group.
-     * @param name    full name.
-     */
-    public Student(String fn, String program, String group, String name) {
-        this.fn = fn;
+    public Student(String fullName, String facultyNumber, int currentYear, Program program, int groupNumber) {
+        this.fullName = fullName;
+        this.facultyNumber = facultyNumber;
+        this.currentYear = currentYear;
         this.program = program;
-        this.group = group;
-        this.name = name;
-        this.year = 1;
+        this.groupNumber = groupNumber;
         this.status = StudentStatus.ENROLLED;
-        this.grades = new HashMap<>();
+        this.examRecords = new ArrayList<>();
+        this.registeredCourses = new ArrayList<>();
+        this.gpa = 0.0;
+        recalculateGpa();
     }
 
-    // ── Getters ──────────────────────────────────────────────────────────────
+    public String getName() {
+        return fullName;
+    }
 
-    public String getName()    { return name; }
-    public String getFn()      { return fn; }
-    public String getProgram() { return program; }
-    public String getGroup()   { return group; }
-    public int    getYear()    { return year; }
-    public StudentStatus getStatus() { return status; }
-    public Map<Discipline, Double> getGrades() { return grades; }
+    public String getFacultyNumber() {
+        return facultyNumber;
+    }
 
-    // ── Setters ──────────────────────────────────────────────────────────────
+    public int getCourse() {
+        return currentYear;
+    }
 
-    public void setProgram(String program) { this.program = program; }
-    public void setGroup(String group)     { this.group = group; }
-    public void setYear(int year)          { this.year = year; }
-    public void setStatus(StudentStatus status) { this.status = status; }
+    public Program getSpecialty() {
+        return program;
+    }
 
-    // ── Domain helpers ───────────────────────────────────────────────────────
+    public int getGroup() {
+        return groupNumber;
+    }
 
-    /**
-     * Returns the average GPA calculated from disciplines that have a grade.
-     * Disciplines without a grade (value {@code null}) are counted as 2.0 (fail).
-     * @return the average grade, or 0.0 if no disciplines are enrolled.
-     */
-    public double calculateGPA() {
-        if (grades.isEmpty()) return 0.0;
-        double sum = 0;
-        for (Map.Entry<Discipline, Double> e : grades.entrySet()) {
-            sum += (e.getValue() == null ? 2.0 : e.getValue());
+    public StudentStatus getStatus() {
+        return status;
+    }
+
+    public List<ExamRecord> getGrades() {
+        return examRecords;
+    }
+
+    public List<Discipline> getEnrolledDisciplines() {
+        return registeredCourses;
+    }
+
+    public double getAverageGrade() {
+        return gpa;
+    }
+
+    public void setCourse(int year) {
+        this.currentYear = year;
+    }
+
+    public void setSpecialty(Program program) {
+        this.program = program;
+    }
+
+    public void setGroup(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
+    public void setStatus(StudentStatus status) {
+        this.status = status;
+    }
+
+    public boolean hasGradeForDiscipline(Discipline discipline) {
+        for (ExamRecord rec : examRecords) {
+            if (rec.getDiscipline().equals(discipline)) return true;
         }
-        return sum / grades.size();
+        return false;
     }
 
-    /**
-     * Returns only disciplines for which a grade exists (exam passed or failed).
-     * @return list of disciplines with recorded grades.
-     */
-    public List<Discipline> getDisciplinesWithGrades() {
-        List<Discipline> result = new ArrayList<>();
-        for (Map.Entry<Discipline, Double> e : grades.entrySet()) {
-            if (e.getValue() != null) result.add(e.getKey());
+    public ExamRecord getGradeForDiscipline(Discipline discipline) {
+        for (ExamRecord rec : examRecords) {
+            if (rec.getDiscipline().equals(discipline)) return rec;
         }
-        return result;
+        return null;
     }
 
-    /**
-     * Returns only disciplines that have been enrolled but have no grade yet.
-     * @return list of disciplines without grades.
-     */
-    public List<Discipline> getDisciplinesWithoutGrades() {
-        List<Discipline> result = new ArrayList<>();
-        for (Map.Entry<Discipline, Double> e : grades.entrySet()) {
-            if (e.getValue() == null) result.add(e.getKey());
+    private boolean hasPassedDiscipline(Discipline discipline) {
+        ExamRecord rec = getGradeForDiscipline(discipline);
+        return rec != null && rec.isPassed();
+    }
+
+    private void recalculateGpa() {
+        double sum = 0.0;
+        int count = 0;
+
+        for (ExamRecord rec : examRecords) {
+            sum += rec.getScore();
+            count++;
         }
-        return result;
-    }
 
-    /**
-     * Checks whether the student has passed all mandatory disciplines
-     * from all years strictly before {@code year} (allowing up to {@code maxFailed} skipped years).
-     * Used for advancing to the next year.
-     * @param year       the year boundary (exclusive).
-     * @param maxFailed  the maximum number of past years with at least one missed mandatory discipline.
-     * @return true if the advance is allowed.
-     */
-    public boolean canAdvance(int year, int maxFailed) {
-        // Group mandatory disciplines by the year they belong to
-        Map<Integer, List<Discipline>> mandatoryByYear = new HashMap<>();
-        for (Discipline d : grades.keySet()) {
-            if (d.getType().toString().equals("mandatory")) {
-                for (int y : d.getYears()) {
-                    if (y < year) {
-                        mandatoryByYear.computeIfAbsent(y, k -> new ArrayList<>()).add(d);
-                    }
-                }
+        for (Discipline d : registeredCourses) {
+            if (!hasGradeForDiscipline(d)) {
+                sum += 2.00;
+                count++;
             }
         }
 
-        int failedYears = 0;
-        for (Map.Entry<Integer, List<Discipline>> entry : mandatoryByYear.entrySet()) {
-            for (Discipline d : entry.getValue()) {
-                Double grade = grades.get(d);
-                if (grade == null || grade < 3.0) {
-                    failedYears++;
-                    break; // one miss per year counts once
-                }
-            }
-        }
-        return failedYears <= maxFailed;
+        gpa = (count == 0) ? 0.0 : sum / count;
     }
 
-    /**
-     * Checks whether the student has passed all mandatory disciplines from past years
-     * in the specified program (used for program transfers).
-     * @param mandatory list of mandatory disciplines of the target program.
-     * @return true if all mandatory disciplines of past years have a passing grade.
-     */
-    public boolean hasPassedMandatoryForProgram(List<Discipline> mandatory) {
-        for (Discipline d : mandatory) {
-            for (int y : d.getYears()) {
-                if (y < this.year) {
-                    Double grade = grades.get(d);
-                    if (grade == null || grade < 3.0) return false;
-                }
-            }
+    public boolean addGrade(ExamRecord record) {
+        if (status != StudentStatus.ENROLLED) return false;
+        if (!registeredCourses.contains(record.getDiscipline())) return false;
+        examRecords.add(record);
+        recalculateGpa();
+        return true;
+    }
+
+    public void addGradeDirectly(ExamRecord record) {
+        examRecords.add(record);
+        recalculateGpa();
+    }
+
+    public void addEnrolledDisciplineDirectly(Discipline discipline) {
+        if (!registeredCourses.contains(discipline)) {
+            registeredCourses.add(discipline);
+            recalculateGpa();
+        }
+    }
+
+    public boolean enrollInDiscipline(Discipline discipline) {
+        if (!EnrollmentChecker.canEnroll(this, discipline)) return false;
+        if (!registeredCourses.contains(discipline)) {
+            registeredCourses.add(discipline);
+            recalculateGpa();
         }
         return true;
     }
 
+    public boolean canAdvance() {
+        int failedMandatory = 0;
+        for (Discipline d : program.getDisciplines()) {
+            if (d.getType() == CourseType.MANDATORY && d.getYear() <= currentYear) {
+                if (!hasPassedDiscipline(d)) failedMandatory++;
+            }
+        }
+        return failedMandatory <= 2;
+    }
+
+    public boolean canGraduate() {
+        for (Discipline d : registeredCourses) {
+            if (!hasPassedDiscipline(d)) return false;
+        }
+        return getRemainingElectiveCredits() == 0;
+    }
+
+
+    public int getEarnedElectiveCredits() {
+        int credits = 0;
+        for (ExamRecord rec : examRecords) {
+            Discipline d = rec.getDiscipline();
+            if (d.getType() == CourseType.ELECTIVE && rec.isPassed()) {
+                credits += d.getCredits();
+            }
+        }
+        return credits;
+    }
+
+    public int getRemainingElectiveCredits() {
+        return Math.max(program.getMinElectiveCredits() - getEarnedElectiveCredits(), 0);
+    }
+
+    public List<ExamRecord> getPassedExams() {
+        List<ExamRecord> result = new ArrayList<>();
+        for (ExamRecord rec : examRecords) {
+            if (rec.isPassed()) result.add(rec);
+        }
+        return result;
+    }
+
+    public List<Discipline> getFailedExams() {
+        List<Discipline> result = new ArrayList<>();
+        for (Discipline d : registeredCourses) {
+            if (!hasPassedDiscipline(d)) result.add(d);
+        }
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Student s)) return false;
-        return Objects.equals(fn, s.fn);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student s = (Student) o;
+        return Objects.equals(facultyNumber, s.facultyNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fn);
-    }
-
-    @Override
-    public String toString() {
-        return "Student{fn='" + fn + "', name='" + name + "', program='" + program
-                + "', group='" + group + "', year=" + year + ", status=" + status + "}";
+        return Objects.hash(facultyNumber);
     }
 }
