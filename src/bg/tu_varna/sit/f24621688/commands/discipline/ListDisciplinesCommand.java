@@ -7,9 +7,19 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 
 import java.util.List;
 
+/**
+ * Executes the listdisciplines command.
+ Prints all disciplines in the repository.
+ */
 public class ListDisciplinesCommand extends BaseCommand {
     public ListDisciplinesCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the listdisciplines command.
+     *
+     * @param args not used
+     * @return a formatted list of all disciplines
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

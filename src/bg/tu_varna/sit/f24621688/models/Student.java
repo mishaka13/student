@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Base class representing a student in the system.
+ * Contains all student data and the logic for enrollment, grading, and graduation.
+ */
 public class Student {
     private final String fullName;
     private final String facultyNumber;

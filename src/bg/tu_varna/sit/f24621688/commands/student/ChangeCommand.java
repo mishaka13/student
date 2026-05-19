@@ -10,9 +10,20 @@ import bg.tu_varna.sit.f24621688.models.Program;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the change command.
+ * Changes the program, group, or year of an enrolled student.
+ */
 public class ChangeCommand extends BaseCommand {
     public ChangeCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the change command.
+     * Supported options: {@code program}, {@code group}, {@code year}.
+     *
+     * @param args {@code args[1]} = faculty number, {@code args[2]} = option, {@code args[3+]} = value
+     * @return a successful result or an error if the operation is not allowed
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");
@@ -27,7 +38,6 @@ public class ChangeCommand extends BaseCommand {
             return CommandResult.error("Student is not enrolled (status: " + student.getStatus() + ").");
 
         if (option.equals("program")) {
-            // Събираме новото ime на специалността
             StringBuilder pb = new StringBuilder();
             for (int i = 3; i < args.length; i++) {
                 if (i > 3) pb.append(" ");
@@ -38,6 +48,7 @@ public class ChangeCommand extends BaseCommand {
             Program newProgram = getRepository().findProgramByName(newProg);
             if (newProgram == null) return CommandResult.error("Specialty '" + newProg + "' not found.");
 
+            /** The student must not have more than 2 failed mandatory disciplines in the new program. */
             int failed = 0;
             for (Discipline d : newProgram.getDisciplines()) {
                 if (d.getType() == CourseType.MANDATORY && d.getYear() <= student.getCourse()) {

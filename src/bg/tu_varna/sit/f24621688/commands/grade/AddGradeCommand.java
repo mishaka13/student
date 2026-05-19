@@ -8,10 +8,19 @@ import bg.tu_varna.sit.f24621688.models.ExamRecord;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Adds an exam grade for a student in a registered discipline.
+ */
 public class AddGradeCommand extends BaseCommand {
 
     public AddGradeCommand(AppSession session) { super(session); }
 
+    /**
+     * The student must be registered in the discipline and must not already have a grade.
+     *
+     * @param args {@code args[1]} = FN, middle tokens = discipline name, last token = grade
+     * @return a successful result or an error if conditions are not met
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

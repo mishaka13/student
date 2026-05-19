@@ -5,10 +5,20 @@ import bg.tu_varna.sit.f24621688.commands.CommandResult;
 import bg.tu_varna.sit.f24621688.models.Program;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the addspecialty command.
+ Adds a new program (specialty) to the repository.
+ */
 public class AddSpecialtyCommand extends BaseCommand {
 
     public AddSpecialtyCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the addspecialty command.
+     *
+     * @param args program name and optional minimum credits
+     * @return a successful result or an error
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

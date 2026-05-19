@@ -9,10 +9,18 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 
 import java.util.List;
 
+/**
+ * Prints an exam protocol for all students registered in a given discipline.
+ * Students are grouped by program and year, and sorted by faculty number.
+ */
 public class ProtocolCommand extends BaseCommand {
 
     public ProtocolCommand(AppSession session) { super(session); }
 
+    /**
+     * @param args the command arguments; discipline name follows the keyword
+     * @return a formatted protocol or an error if the discipline is not found
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

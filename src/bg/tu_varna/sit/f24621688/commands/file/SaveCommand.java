@@ -7,9 +7,19 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 
 import java.io.IOException;
 
+/**
+ * Saves the current data back to the open file.
+ */
 public class SaveCommand extends BaseCommand {
     public SaveCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the save command.
+     * Resets the unsaved-changes flag on success.
+     *
+     * @param args the command arguments (none required)
+     * @return a successful result or an error if no file is open or  fails
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

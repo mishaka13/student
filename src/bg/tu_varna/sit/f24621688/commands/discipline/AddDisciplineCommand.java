@@ -7,10 +7,18 @@ import bg.tu_varna.sit.f24621688.models.Discipline;
 import bg.tu_varna.sit.f24621688.models.Program;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the adddiscipline command.
+ *Adds a new discipline and links it to all existing programs.
+ */
 
 public class AddDisciplineCommand extends BaseCommand {
     public AddDisciplineCommand(AppSession session) { super(session); }
 
+    /**
+     * @param args name, type (MANDATORY|ELECTIVE), credits, year
+     * @return a successful result or an error
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

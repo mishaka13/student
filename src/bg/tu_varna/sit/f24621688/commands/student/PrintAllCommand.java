@@ -9,10 +9,20 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Executes the printall command.
+ * Prints all actively enrolled students in the given program and academic year.
+ */
 public class PrintAllCommand extends BaseCommand {
 
     public PrintAllCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the printall command.
+     *
+     * @param args tokens from the input; the last token is the year, the rest form the program name
+     * @return a formatted student list or an error if arguments are invalid
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

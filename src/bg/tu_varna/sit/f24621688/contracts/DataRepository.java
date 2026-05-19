@@ -6,6 +6,10 @@ import bg.tu_varna.sit.f24621688.models.Student;
 
 import java.util.List;
 
+/**
+ * Defines the contract for the application's data storage.
+ * Provides CRUD operations for {@link Student}, {@link Program} and {@link Discipline}.
+ */
 public interface DataRepository {
 
     void addStudent(Student student);

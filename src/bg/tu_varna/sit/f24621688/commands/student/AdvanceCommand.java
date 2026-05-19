@@ -6,9 +6,20 @@ import bg.tu_varna.sit.f24621688.enums.StudentStatus;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the advance command.
+ * Moves a student to the next academic year if all conditions are met.
+ */
 public class AdvanceCommand extends BaseCommand {
     public AdvanceCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the advance command.
+     * The student must be enrolled, not in year 4, and have at most 2 failed mandatory subjects.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a successful result or an error if conditions are not met
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

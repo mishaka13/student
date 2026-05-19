@@ -1,5 +1,9 @@
 package bg.tu_varna.sit.f24621688.commands;
 
+/**
+ * Wraps the result of a command execution.
+ * Use  methods {@link #success(String)} and {@link #error(String)}.
+ */
 public class CommandResult {
     private final boolean success;
     private final String message;
@@ -9,6 +13,12 @@ public class CommandResult {
         this.message = message;
     }
 
+    /**
+     * Creates a successful result with the given message.
+     *
+     * @param message the success message to display
+     * @return a {@code CommandResult} with {@code success = true}
+     */
     public static CommandResult success(String message) {
         return new CommandResult(true, message);
     }
@@ -18,6 +28,11 @@ public class CommandResult {
         return new CommandResult(false, msg);
     }
 
+    /**
+     * Returns whether the command succeeded.
+     *
+     * @return {@code true} if the command was successful
+     */
     public boolean isSuccess() {
         return success;
     }

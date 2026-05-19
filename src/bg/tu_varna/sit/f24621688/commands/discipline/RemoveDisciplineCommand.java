@@ -5,9 +5,17 @@ import bg.tu_varna.sit.f24621688.commands.CommandResult;
 import bg.tu_varna.sit.f24621688.models.Discipline;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the removediscipline command.
+ Removes a discipline from the repository.
+ */
 public class RemoveDisciplineCommand extends BaseCommand {
     public RemoveDisciplineCommand(AppSession session) { super(session); }
 
+    /**
+     * @param args the discipline name to remove
+     * @return a successful result or an error if not found
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

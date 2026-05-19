@@ -4,9 +4,18 @@ import bg.tu_varna.sit.f24621688.commands.BaseCommand;
 import bg.tu_varna.sit.f24621688.commands.CommandResult;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Closes the currently open file and clears all data from the repository.
+ */
 public class CloseCommand extends BaseCommand {
     public CloseCommand(AppSession session) { super(session); }
 
+    /**
+     * Refuses to close if there are unsaved changes.
+     *
+     * @param args the command arguments (none required)
+     * @return a successful result or an error if no file is open or changes are unsaved
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen())

@@ -6,9 +6,20 @@ import bg.tu_varna.sit.f24621688.enums.StudentStatus;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the graduate command.
+ * Marks a student as graduated if all requirements are fulfilled.
+ */
 public class GraduateCommand extends BaseCommand {
     public GraduateCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the graduate command.
+     * The student must have passed all registered disciplines and earned enough elective credits.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a successful result or an error if graduation requirements are not met
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

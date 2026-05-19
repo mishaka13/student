@@ -13,9 +13,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles reading and writing the application's XML data files.
+ *Load order matters: Programs → Disciplines → Students.
+ */
 public class XmlStorage {
     private static String currentDirectory = "";
 
+    /**
+     * Sets the directory of the currently open file.
+     *
+     * @param dir the directory path; may be empty
+     */
     public static void setCurrentDirectory(String dir) {
         currentDirectory = (dir == null) ? "" : dir;
     }
@@ -24,6 +33,14 @@ public class XmlStorage {
         return currentDirectory.isEmpty() ? filename : currentDirectory + "/" + filename;
     }
 
+    /**
+     * rialises all repository data to an XML file on disk.
+     * Write order: programs → disciplines → students.
+     *
+     * @param repo     the repository whose data to save
+     * @param filepath the target file path
+     * @throws IOException if an I/O error occurs
+     */
     public static void saveAllData(DataRepository repo, String filepath) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -158,9 +175,24 @@ public class XmlStorage {
         }
     }
 
+    /**
+     * Reads the entire content of a UTF-8 file as a string.
+     *
+     * @param filepath the file path to read
+     * @return the file content
+     * @throws IOException if an I/O error occurs
+     */
+
     private static String readFile(String filepath) throws IOException {
         return new String(Files.readAllBytes(Paths.get(filepath)), StandardCharsets.UTF_8);
     }
+    /**
+     * Writes a string to a UTF-8 file, creating parent directories if necessary.
+     *
+     * @param filepath the target file path
+     * @param content  the content to write
+     * @throws IOException if an I/O error occurs
+     */
 
     private static void writeFile(String filepath, String content) throws IOException {
         Path path = Paths.get(filepath);
@@ -169,6 +201,13 @@ public class XmlStorage {
         Files.write(path, content.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Extracts the content of the first occurrence of the given XML tag.
+     *
+     * @param xml the XML string to search
+     * @param tag the tag name without angle brackets
+     * @return the inner content, or {@code null} if the tag is not found
+     */
     private static String extractTag(String xml, String tag) {
         String open = "<" + tag + ">";
         String close = "</" + tag + ">";

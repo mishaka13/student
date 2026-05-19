@@ -9,9 +9,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Opens an XML file and loads its contents into the repository.
+ * If the file does not exist, starts a new empty session.
+ */
 public class OpenCommand extends BaseCommand {
     public OpenCommand(AppSession session) { super(session); }
 
+    /**
+     Executes the open command.*
+     *
+     * @param args the command arguments; {@code args[1]} is the file path
+     * @return a successful result or an error if a file is already open or fails
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
@@ -26,6 +36,8 @@ public class OpenCommand extends BaseCommand {
                 return CommandResult.error("Close '" + cur + "' first before opening a new file.");
             }
 
+
+            /** Split the path into directory and file name. */
             String dir = "", fileName = filepath;
             if (filepath.contains("/")) {
                 dir = filepath.substring(0, filepath.lastIndexOf('/'));

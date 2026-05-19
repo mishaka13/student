@@ -5,9 +5,19 @@ import bg.tu_varna.sit.f24621688.commands.CommandResult;
 import bg.tu_varna.sit.f24621688.models.Program;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the removespecialty command.
+ Removes a program from the repository.
+ */
 public class RemoveSpecialtyCommand extends BaseCommand {
     public RemoveSpecialtyCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the removespecialty command.
+     *
+     * @param args the program name to remove
+     * @return a successful result or an error if the program is not found
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

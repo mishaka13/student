@@ -6,9 +6,19 @@ import bg.tu_varna.sit.f24621688.enums.StudentStatus;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the interrupt command.
+ * Suspends a student's studies by setting their status to {@link StudentStatus#SUSPENDED}.
+ */
 public class InterruptCommand extends BaseCommand {
     public InterruptCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the interrupt command.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a successful result or an error if the student is not enrolled
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

@@ -7,9 +7,19 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 
 import java.util.List;
 
+/**
+ * Executes the listspecialties command.
+ Prints all programs currently in the repository.
+ */
 public class ListSpecialtiesCommand extends BaseCommand {
     public ListSpecialtiesCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the listspecialties command.
+     *
+     * @param args not used
+     * @return a formatted list of all programs
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

@@ -9,9 +9,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Saves the current data to a new file and makes it the active file.
+ */
 public class SaveAsCommand extends BaseCommand {
     public SaveAsCommand(AppSession session) { super(session); }
 
+    /**
+     * @param args the command arguments; {@code args[1]} is the new file path
+     * @return a successful result or an error if conditions are not met
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

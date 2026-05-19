@@ -6,16 +6,26 @@ import bg.tu_varna.sit.f24621688.models.Program;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the enroll command.
+ * Enrolls a new student in year 1 of the given program.
+ */
 public class EnrollCommand extends BaseCommand {
     public EnrollCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the enroll command.
+     *
+     * @param args the command arguments: {@code enroll <fn> "<program>" <group> "<name>"}
+     * @return a successful result or an error if arguments are invalid
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");
         if (args.length < 5) return CommandResult.error("Usage: enroll <fn> \"<program>\" <group> \"<name>\"");
 
         String fn = args[1];
-
+        /** Find the group number index by scanning right to left for the first integer. */
         int groupIndex = -1;
         for (int i = args.length - 1; i >= 2; i--) {
             try { Integer.parseInt(args[i]); groupIndex = i; break; }

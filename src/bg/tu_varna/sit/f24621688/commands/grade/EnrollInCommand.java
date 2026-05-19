@@ -8,10 +8,21 @@ import bg.tu_varna.sit.f24621688.models.ExamRecord;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+
+/**
+ * Registers a student in a specific discipline for their current academic year.
+ */
 public class EnrollInCommand extends BaseCommand {
 
     public EnrollInCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the enrollin command.
+     * Validates five conditions before registering the student.
+     *
+     * @param args {@code args[1]} = faculty number, {@code args[2+]} = discipline name in quotes
+     * @return a successful result or an error if any condition fails
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");
@@ -19,6 +30,8 @@ public class EnrollInCommand extends BaseCommand {
 
         String fn = args[1];
 
+
+        /** Collect the full discipline name from remaining tokens. */
         StringBuilder db = new StringBuilder();
         for (int i = 2; i < args.length; i++) {
             if (i > 2) db.append(" ");

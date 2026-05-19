@@ -2,12 +2,22 @@ package bg.tu_varna.sit.f24621688.session;
 
 import bg.tu_varna.sit.f24621688.contracts.DataRepository;
 
+/**
+ * Manages the current working session of the application.
+ * Tracks the open file path and whether unsaved changes exist.
+ */
 public class AppSession {
     private final DataRepository repository;
     private String currentFilePath;
     private boolean fileOpen;
     private boolean hasUnsavedChanges;
 
+    /**
+     * Constructs a new {@code AppSession} with the given repository.
+     * Initialises with no open file.
+     *
+     * @param repository the data repository to use; must not be {@code null}
+     */
     public AppSession(DataRepository repository) {
         this.repository = repository;
         this.currentFilePath = null;

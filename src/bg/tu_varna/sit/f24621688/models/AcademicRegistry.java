@@ -5,6 +5,10 @@ import bg.tu_varna.sit.f24621688.contracts.DataRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * In-memory implementation of {@link DataRepository}.
+ * Stores all students, programs and disciplines in three separate lists.
+ */
 public class AcademicRegistry implements DataRepository {
     private final List<Student> students;
     private final List<Program> programs;

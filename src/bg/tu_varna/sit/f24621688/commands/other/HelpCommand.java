@@ -5,6 +5,10 @@ import bg.tu_varna.sit.f24621688.contracts.Command;
 
 import java.util.Map;
 
+/**
+ * Executes the help command.
+ * Prints all supported commands and their syntax.
+ */
 public class HelpCommand implements Command {
     private final Map<String, Command> commands;
 
@@ -12,6 +16,12 @@ public class HelpCommand implements Command {
         this.commands = commands;
     }
 
+    /**
+     * Executes the help command.
+     *
+     * @param args not used
+     * @return the full help menu
+     */
     @Override
     public CommandResult execute(String[] args) {
         String msg = "\n=========================================\n"

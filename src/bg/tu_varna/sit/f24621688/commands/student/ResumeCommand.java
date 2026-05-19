@@ -6,9 +6,19 @@ import bg.tu_varna.sit.f24621688.enums.StudentStatus;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the resume command.
+ * Restores a suspended student's rights by setting their status back to {@link StudentStatus#ENROLLED}.
+ */
 public class ResumeCommand extends BaseCommand {
     public ResumeCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the resume command.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a successful result or an error if the student is not suspended
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

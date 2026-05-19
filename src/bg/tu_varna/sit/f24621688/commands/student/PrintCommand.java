@@ -5,10 +5,20 @@ import bg.tu_varna.sit.f24621688.commands.CommandResult;
 import bg.tu_varna.sit.f24621688.models.Student;
 import bg.tu_varna.sit.f24621688.session.AppSession;
 
+/**
+ * Executes the print command.
+ * Prints a summary of a single student's information.
+ */
 public class PrintCommand extends BaseCommand {
 
     public PrintCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the print command.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a formatted student summary or an error if the student is not found
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");

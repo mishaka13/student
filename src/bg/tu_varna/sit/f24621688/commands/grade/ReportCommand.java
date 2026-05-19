@@ -9,10 +9,20 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 
 import java.util.List;
 
+/**
+ * Executes the report command.
+ * Prints an academic report for a student, including passed exams, pending subjects, GPA and credits.
+ */
 public class ReportCommand extends BaseCommand {
 
     public ReportCommand(AppSession session) { super(session); }
 
+    /**
+     * Executes the report command.
+     *
+     * @param args the command arguments; {@code args[1]} is the faculty number
+     * @return a formatted academic report or an error if the student is not found
+     */
     @Override
     public CommandResult execute(String[] args) {
         if (!getSession().isFileOpen()) return CommandResult.error("No file is open.");
@@ -27,6 +37,7 @@ public class ReportCommand extends BaseCommand {
         sb.append("Faculty Number:  ").append(s.getFacultyNumber()).append("\n");
         sb.append("Specialty:       ").append(s.getSpecialty().getName()).append("\n\n");
 
+        /** List all passed exams with their scores. */
         sb.append("PASSED EXAMS:\n-------------\n");
         List<ExamRecord> passed = s.getPassedExams();
         if (passed.isEmpty()) {
@@ -38,6 +49,7 @@ public class ReportCommand extends BaseCommand {
             }
         }
 
+        /** List all registered disciplines without a passing grade. */
         sb.append("\nFAILED / PENDING EXAMS:\n------------------------\n");
         List<Discipline> failed = s.getFailedExams();
         if (failed.isEmpty()) {

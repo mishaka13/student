@@ -12,14 +12,27 @@ import bg.tu_varna.sit.f24621688.session.AppSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Reads user input and routes it to the correct {@link Command}.
+ */
 public class CommandParser {
     private final Map<String, Command> commandMap;
 
+    /**
+     * Constructs a {@code CommandParser} and registers all supported commands.
+     *
+     * @param session the working session passed to each command
+     */
     public CommandParser(AppSession session) {
         this.commandMap = new HashMap<>();
         registerAll(session);
     }
 
+    /**
+     * Registers all supported commands in {@link #commandMap}.
+     *
+     * @param session the session passed to each command constructor
+     */
     private void registerAll(AppSession session) {
         register(new OpenCommand(session));
         register(new SaveCommand(session));
